@@ -1,20 +1,68 @@
-name: Jekyll site CI
+name: valida calculadora
+
+# Controls when the workflow will run
+# Controla quando o fluxo de trabalho será executado
 
 on:
+
+# Triggers the workflow on push or pull request events but only for the "main" branch
+
+# Aciona o fluxo de trabalho em eventos de solicitação push ou pull, mas apenas para o branch "principal"
+
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
+ # This workflow contains a single job called "build"
+ # Este fluxo de trabalho contém um único trabalho chamado "build"
+
   build:
+  #construir
+
+  # The type of runner that the job will run on
+ 
+    # O tipo de executor em que o trabalho será executado
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the site in the jekyll/builder container
-      run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps represent a sequence of tasks that will be executed as part of the job
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+  #Deploy (Implantação): significa salvar a aplicação feita em uma pasta e configurar a JVM para ler e executar este programa.
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs: build
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy Dev
+
+
+  deploy-hmg:
+    runs-on: ubuntu-latest
+    environment:
+      name: hmg
+    needs: deploy-dev
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy HMG
+
+
+#Deploy (Implantação): significa salvar a aplicação feita em uma pasta e configurar a JVM para ler e executar este programa.
+
+  deploy-prd:
+    runs-on: ubuntu-latest
+    environment:
+      name: prd
+    needs: deploy-hmg
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy PRD
